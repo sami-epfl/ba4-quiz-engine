@@ -235,7 +235,7 @@ function buildShell() {
         <h1>${_title}</h1>
         ${_subtitle ? `<div class="subtitle">${_subtitle}</div>` : ""}
       </div>
-      <button class="btn-restart hidden" id="btn-restart" onclick="startQuiz()" title="Restart">↺</button>
+      <button class="btn-restart hidden" id="btn-restart" onclick="backToStart()" title="Restart">↺</button>
     </header>
     <main>
       <div class="progress-wrap hidden" id="progress-wrap">
