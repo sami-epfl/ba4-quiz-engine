@@ -1,4 +1,6 @@
-const QUIZ_TITLE = "CS-233 Review";
+const cfg = (typeof QUIZ_CONFIG !== "undefined") ? QUIZ_CONFIG : {};
+const _title    = cfg.title    || "Quiz";
+const _subtitle = cfg.subtitle || "";
 
 const TOPICS = {};
 
@@ -225,4 +227,40 @@ function backToStart() {
   renderTopicSelector();
 }
 
-window.addEventListener("DOMContentLoaded", init);
+function buildShell() {
+  document.title = _title;
+  document.body.innerHTML = `
+    <header>
+      <div class="logo">
+        <h1>${_title}</h1>
+        ${_subtitle ? `<div class="subtitle">${_subtitle}</div>` : ""}
+      </div>
+      <button class="btn-restart hidden" id="btn-restart" onclick="startQuiz()" title="Restart">↺</button>
+    </header>
+    <main>
+      <div class="progress-wrap hidden" id="progress-wrap">
+        <div class="progress-meta">
+          <span id="prog-label">1 / ?</span>
+          <span id="prog-score">0 correct</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="prog-fill"></div>
+        </div>
+      </div>
+      <div id="quiz-area">
+        <div class="start-screen">
+          <h2>Ready to review?</h2>
+          <p>Click an answer to validate it.<br>The correct answer is shown immediately.</p>
+          <div class="start-chips">
+            <span class="chip chip-accent" id="question-count">… questions</span>
+            <span class="chip">True/False &amp; MCQ</span>
+            <span class="chip">Randomized</span>
+          </div>
+          <div class="topic-selector" id="topic-selector"></div>
+          <button class="btn-primary" onclick="startQuiz()">Start</button>
+        </div>
+      </div>
+    </main>`;
+}
+
+window.addEventListener("DOMContentLoaded", () => { buildShell(); init(); });
