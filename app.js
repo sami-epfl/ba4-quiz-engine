@@ -117,7 +117,7 @@ function showQuestion() {
   updateProgress();
 
   const q = activeQuestions[order[current]];
-  const labels = ["A", "B", "C", "D", "E"];
+  const labels = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
   let opts = q.options
     ? shuffle(q.options.map((text, i) => ({ text, orig: i })))
