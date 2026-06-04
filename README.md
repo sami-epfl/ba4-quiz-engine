@@ -53,4 +53,4 @@ registerTopic("My Topic",
 
 ## Example implementation
 
-See [ba4-cs233-qcm](https://github.com/sami-epfl/ba4-cs233-qcm) — a full course repo using this engine, live at [sami-epfl.github.io/ba4-cs233-qcm](https://sami-epfl.github.io/ba4-cs233-qcm/).
+See [ba4-cs233-quiz](https://github.com/sami-epfl/ba4-cs233-quiz) — a full course repo using this engine, live at [sami-epfl.github.io/ba4-cs233-quiz](https://sami-epfl.github.io/ba4-cs233-quiz/).
