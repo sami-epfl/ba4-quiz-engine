@@ -35,7 +35,7 @@ Shared quiz engine for BA4 course quiz repos.
 ```js
 registerTopic("My Topic",
   {
-    type: "mcq",
+    type: "scq",
     question: "Question?",
     options: ["A", "B", "C", "D"],
     answer: 0,
