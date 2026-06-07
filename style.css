@@ -144,6 +144,7 @@ main {
 .opt.correct  { border-color: var(--correct); background: var(--correct-soft); }
 .opt.wrong    { border-color: var(--wrong);   background: var(--wrong-soft); }
 .opt.also     { border-color: var(--correct); background: var(--correct-soft); }
+.opt.selected { border-color: var(--accent);  background: var(--accent-soft); }
 .opt.disabled { cursor: default; }
 
 .opt-ring {
@@ -153,14 +154,16 @@ main {
   font-size: .72rem; font-weight: 700; flex-shrink: 0;
   transition: all .18s; color: var(--text-muted);
 }
-.opt.correct .opt-ring { border-color: var(--correct); color: var(--correct); }
-.opt.wrong   .opt-ring { border-color: var(--wrong);   color: var(--wrong); }
-.opt.also    .opt-ring { border-color: var(--correct); color: var(--correct); }
+.opt.correct  .opt-ring { border-color: var(--correct); color: var(--correct); }
+.opt.wrong    .opt-ring { border-color: var(--wrong);   color: var(--wrong); }
+.opt.also     .opt-ring { border-color: var(--correct); color: var(--correct); }
+.opt.selected .opt-ring { border-color: var(--accent);  color: var(--accent); }
 
 .opt-txt { font-size: .9rem; line-height: 1.4; color: var(--text); flex: 1; }
-.opt.correct .opt-txt { color: var(--correct); font-weight: 500; }
-.opt.wrong   .opt-txt { color: var(--wrong); }
-.opt.also    .opt-txt { color: var(--correct); font-weight: 500; }
+.opt.correct  .opt-txt { color: var(--correct); font-weight: 500; }
+.opt.wrong    .opt-txt { color: var(--wrong); }
+.opt.also     .opt-txt { color: var(--correct); font-weight: 500; }
+.opt.selected .opt-txt { color: var(--accent); font-weight: 500; }
 
 .opt-tag {
   font-size: .7rem; font-weight: 600;

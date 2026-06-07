@@ -110,6 +110,10 @@ function updateProgress() {
   document.getElementById("prog-fill").style.width = pct + "%";
 }
 
+function isMulti(q) {
+  return Array.isArray(q.answer);
+}
+
 function showQuestion() {
   if (current >= order.length) { showResults(); return; }
 
@@ -119,59 +123,88 @@ function showQuestion() {
   const q = activeQuestions[order[current]];
   const labels = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
-  let opts = q.options
-    ? shuffle(q.options.map((text, i) => ({ text, orig: i })))
-    : null;
+  let opts;
+  if (q.type === "tf") {
+    opts = [{ text: "True", orig: "true" }, { text: "False", orig: "false" }];
+  } else {
+    opts = shuffle(q.options.map((text, i) => ({ text, orig: String(i) })));
+  }
 
-  const optionsHTML = q.type === "tf"
-    ? [{ text: "True", orig: true }, { text: "False", orig: false }]
-        .map((o, i) => `
-          <div class="opt" data-orig="${o.orig}" onclick="pick(this, ${o.orig === q.answer})">
-            <div class="opt-ring">${labels[i]}</div>
-            <div class="opt-txt">${o.text}</div>
-          </div>`).join("")
-    : opts.map((o, i) => `
-        <div class="opt" data-orig="${o.orig}" onclick="pick(this, ${o.orig === q.answer})">
-          <div class="opt-ring">${labels[i]}</div>
-          <div class="opt-txt">${o.text}</div>
-        </div>`).join("");
+  const optionsHTML = opts.map((o, i) => `
+    <div class="opt" data-orig="${o.orig}" onclick="toggleOpt(this)">
+      <div class="opt-ring">${labels[i]}</div>
+      <div class="opt-txt">${o.text}</div>
+    </div>`).join("");
 
   document.getElementById("quiz-area").innerHTML = `
     <div class="question-card">
       <div class="q-label">${q.type === "tf" ? "True / False" : "Multiple Choice"}</div>
       <div class="q-text">${q.question}</div>
       <div class="options-list">${optionsHTML}</div>
+      <div id="confirm-wrap" style="margin-top:12px">
+        <button class="btn-next" onclick="confirmAnswer()">Confirm →</button>
+      </div>
       <div class="card-footer" id="card-footer"></div>
     </div>`;
 }
 
-function pick(el, isCorrect) {
+function toggleOpt(el) {
   if (answered) return;
-  answered = true;
+  const q = activeQuestions[order[current]];
+  if (isMulti(q)) {
+    el.classList.toggle("selected");
+  } else {
+    document.querySelectorAll(".opt").forEach(o => o.classList.remove("selected"));
+    el.classList.add("selected");
+  }
+}
+
+function confirmAnswer() {
+  if (answered) return;
 
   const q = activeQuestions[order[current]];
+  const selected = new Set(
+    [...document.querySelectorAll(".opt.selected")].map(o => o.dataset.orig)
+  );
+
+  if (selected.size === 0) return;
+
+  answered = true;
+
+  let isCorrect;
+  let correctSet;
+  if (isMulti(q)) {
+    correctSet = new Set(q.answer.map(String));
+    isCorrect = correctSet.size === selected.size && [...correctSet].every(v => selected.has(v));
+  } else if (q.type === "tf") {
+    correctSet = new Set([String(q.answer)]);
+    isCorrect = selected.has(String(q.answer));
+  } else {
+    correctSet = new Set([String(q.answer)]);
+    isCorrect = selected.has(String(q.answer));
+  }
 
   document.querySelectorAll(".opt").forEach(o => {
+    o.classList.remove("selected");
     o.classList.add("disabled");
     o.style.pointerEvents = "none";
+    const orig = o.dataset.orig;
+    const wasSelected = selected.has(orig);
+    const isCorrectOpt = correctSet.has(orig);
+    if (wasSelected && isCorrectOpt) {
+      o.classList.add("correct");
+      o.insertAdjacentHTML("beforeend", `<span class="opt-tag tag-correct">✓ Correct</span>`);
+    } else if (wasSelected && !isCorrectOpt) {
+      o.classList.add("wrong");
+      o.insertAdjacentHTML("beforeend", `<span class="opt-tag tag-wrong">✗ Wrong</span>`);
+    } else if (!wasSelected && isCorrectOpt) {
+      o.classList.add("also");
+      o.insertAdjacentHTML("beforeend", `<span class="opt-tag tag-also">✓ Correct answer</span>`);
+    }
   });
 
-  el.classList.add(isCorrect ? "correct" : "wrong");
-  el.insertAdjacentHTML("beforeend",
-    `<span class="opt-tag ${isCorrect ? "tag-correct" : "tag-wrong"}">${isCorrect ? "✓ Correct" : "✗ Wrong"}</span>`);
-
-  if (!isCorrect) {
-    document.querySelectorAll(".opt").forEach(o => {
-      const orig = o.dataset.orig;
-      const isCorrectOrig = q.type === "tf"
-        ? (orig === String(q.answer))
-        : (parseInt(orig) === q.answer);
-      if (isCorrectOrig) {
-        o.classList.add("also");
-        o.insertAdjacentHTML("beforeend", `<span class="opt-tag tag-also">✓ Correct answer</span>`);
-      }
-    });
-  }
+  const wrap = document.getElementById("confirm-wrap");
+  if (wrap) wrap.remove();
 
   if (isCorrect) score++;
   current++;
@@ -215,7 +248,7 @@ function backToStart() {
   document.getElementById("quiz-area").innerHTML = `
     <div class="start-screen">
       <h2>Ready to review?</h2>
-      <p>Click an answer to validate it.<br>The correct answer is shown immediately.</p>
+      <p>Select your answer(s), then click <strong>Confirm</strong>.</p>
       <div class="start-chips">
         <span class="chip chip-accent" id="question-count">… questions</span>
         <span class="chip">True/False &amp; MCQ</span>
@@ -250,7 +283,7 @@ function buildShell() {
       <div id="quiz-area">
         <div class="start-screen">
           <h2>Ready to review?</h2>
-          <p>Click an answer to validate it.<br>The correct answer is shown immediately.</p>
+          <p>Select your answer(s), then click <strong>Confirm</strong>.</p>
           <div class="start-chips">
             <span class="chip chip-accent" id="question-count">… questions</span>
             <span class="chip">True/False &amp; MCQ</span>
