@@ -123,6 +123,19 @@ function showQuestion() {
   const q = activeQuestions[order[current]];
   const labels = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
+  if (q.type === "flashcard") {
+    document.getElementById("quiz-area").innerHTML = `
+      <div class="question-card">
+        <div class="q-label">Flashcard</div>
+        <div class="q-text">${q.question}</div>
+        <div id="fc-body">
+          <button class="btn-next" style="margin-left:0" onclick="revealFlashcard()">Reveal answer →</button>
+        </div>
+        <div class="card-footer" id="card-footer"></div>
+      </div>`;
+    return;
+  }
+
   let opts;
   if (q.type === "tf") {
     opts = [{ text: "True", orig: "true" }, { text: "False", orig: "false" }];
@@ -218,6 +231,24 @@ function confirmAnswer() {
 
   document.getElementById("card-footer").innerHTML =
     `${badge}${exp}<button class="btn-next" onclick="showQuestion()">${nextLabel}</button>`;
+}
+
+function revealFlashcard() {
+  const q = activeQuestions[order[current]];
+  document.getElementById("fc-body").innerHTML = `
+    <div class="fc-answer">${q.answer}</div>
+    <div class="fc-actions">
+      <button class="btn-fc-wrong" onclick="scoreFlashcard(false)">✗ Missed it</button>
+      <button class="btn-fc-correct" onclick="scoreFlashcard(true)">✓ Got it</button>
+    </div>`;
+}
+
+function scoreFlashcard(correct) {
+  if (answered) return;
+  answered = true;
+  if (correct) score++;
+  current++;
+  showQuestion();
 }
 
 function showResults() {

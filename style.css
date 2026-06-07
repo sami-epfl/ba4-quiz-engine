@@ -209,6 +209,25 @@ main {
 }
 .btn-next:hover { opacity: .85; transform: translateY(-1px); }
 
+/* ── Flashcard ── */
+.fc-answer {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1rem 1.2rem;
+  font-size: .95rem; line-height: 1.6; color: var(--text);
+  margin-bottom: 1rem; animation: fadeUp .2s ease;
+}
+.fc-actions {
+  display: flex; gap: .75rem; justify-content: flex-end; flex-wrap: wrap;
+}
+.btn-fc-correct, .btn-fc-wrong {
+  padding: .65rem 1.3rem; border: none; border-radius: 8px;
+  font-family: inherit; font-size: .88rem; font-weight: 600;
+  cursor: pointer; transition: opacity .2s, transform .15s;
+}
+.btn-fc-correct { background: var(--correct-soft); color: var(--correct); border: 1px solid var(--correct); }
+.btn-fc-wrong   { background: var(--wrong-soft);   color: var(--wrong);   border: 1px solid var(--wrong); }
+.btn-fc-correct:hover, .btn-fc-wrong:hover { opacity: .8; transform: translateY(-1px); }
+
 /* ── Start screen ── */
 .start-screen {
   background: var(--surface); border: 1px solid var(--border);
