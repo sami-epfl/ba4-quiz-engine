@@ -32,42 +32,115 @@ function updateQuestionCount() {
   if (el) el.textContent = `${count} question${count !== 1 ? "s" : ""}`;
 }
 
+function buildTopicGroups(names) {
+  // Count how many topics share a "Prefix - ..." pattern
+  const prefixCounts = {};
+  names.forEach(name => {
+    const m = name.match(/^(.+?) - /);
+    if (m) prefixCounts[m[1]] = (prefixCounts[m[1]] || 0) + 1;
+  });
+  const groupPrefixes = new Set(Object.keys(prefixCounts).filter(p => prefixCounts[p] >= 2));
+
+  // Build ordered list preserving original topic order
+  const items = [];
+  const seenGroups = new Set();
+  names.forEach(name => {
+    const m = name.match(/^(.+?) - /);
+    const prefix = m && groupPrefixes.has(m[1]) ? m[1] : null;
+    if (prefix) {
+      if (!seenGroups.has(prefix)) {
+        seenGroups.add(prefix);
+        items.push({ type: "group", prefix, members: names.filter(n => n.startsWith(prefix + " - ")) });
+      }
+    } else {
+      items.push({ type: "topic", name });
+    }
+  });
+  return items;
+}
+
 function renderTopicSelector() {
   const container = document.getElementById("topic-selector");
   if (!container) return;
 
   const names = Object.keys(TOPICS);
+  const total = names.reduce((n, k) => n + TOPICS[k].length, 0);
+  const items = buildTopicGroups(names);
 
   const allCheckbox = `
-    <label class="topic-label topic-label-all">
-      <input type="checkbox" id="cb-all" checked onchange="toggleAll(this)" />
-      <span class="topic-name">All topics</span>
-      <span class="topic-count">${names.reduce((n, k) => n + TOPICS[k].length, 0)}</span>
-    </label>`;
+    <div class="topic-label-all-wrap">
+      <label class="topic-label topic-label-all">
+        <input type="checkbox" id="cb-all" checked onchange="toggleAll(this)" />
+        <span class="topic-name">All topics</span>
+        <span class="topic-count">${total}</span>
+      </label>
+    </div>`;
 
-  const topicCheckboxes = names.map(name => `
-    <label class="topic-label">
-      <input type="checkbox" class="topic-checkbox" value="${name}" checked onchange="onTopicChange()" />
-      <span class="topic-name">${name}</span>
-      <span class="topic-count">${TOPICS[name].length}</span>
-    </label>`).join("");
+  const itemsHTML = items.map(item => {
+    if (item.type === "topic") {
+      return `<label class="topic-label">
+        <input type="checkbox" class="topic-checkbox" value="${item.name}" checked onchange="onTopicChange()" />
+        <span class="topic-name">${item.name}</span>
+        <span class="topic-count">${TOPICS[item.name].length}</span>
+      </label>`;
+    } else {
+      const groupCount = item.members.reduce((n, m) => n + TOPICS[m].length, 0);
+      const subItems = item.members.map(name => `
+        <label class="topic-label topic-label-sub">
+          <input type="checkbox" class="topic-checkbox" value="${name}" checked onchange="onTopicChange()" />
+          <span class="topic-name">${name.slice(item.prefix.length + 3)}</span>
+          <span class="topic-count">${TOPICS[name].length}</span>
+        </label>`).join("");
+      return `
+        <div class="topic-group">
+          <div class="topic-label topic-label-group" onclick="toggleGroupExpand(this)">
+            <input type="checkbox" class="topic-group-cb" data-group="${item.prefix}" checked
+              onchange="toggleGroup(this)" onclick="event.stopPropagation()" />
+            <span class="topic-name">${item.prefix}</span>
+            <span style="flex:1"></span>
+            <span class="topic-count topic-group-total">${groupCount}</span>
+            <span class="topic-group-arrow">▾</span>
+          </div>
+          <div class="topic-group-children">${subItems}</div>
+        </div>`;
+    }
+  }).join("");
 
-  container.innerHTML = allCheckbox + topicCheckboxes;
+  container.innerHTML = allCheckbox + itemsHTML;
   updateQuestionCount();
 }
 
+function toggleGroupExpand(headerEl) {
+  headerEl.closest(".topic-group").classList.toggle("collapsed");
+}
+
+function toggleGroup(cb) {
+  cb.closest(".topic-group").querySelectorAll(".topic-checkbox").forEach(c => { c.checked = cb.checked; });
+  onTopicChange();
+}
+
 function toggleAll(allCb) {
-  document.querySelectorAll(".topic-checkbox").forEach(cb => {
-    cb.checked = allCb.checked;
-  });
+  document.querySelectorAll(".topic-checkbox").forEach(cb => { cb.checked = allCb.checked; });
+  document.querySelectorAll(".topic-group-cb").forEach(gcb => { gcb.checked = allCb.checked; gcb.indeterminate = false; });
   updateQuestionCount();
 }
 
 function onTopicChange() {
-  const checkboxes = document.querySelectorAll(".topic-checkbox");
-  const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+  // Sync group checkboxes
+  document.querySelectorAll(".topic-group-cb").forEach(gcb => {
+    const children = Array.from(gcb.closest(".topic-group").querySelectorAll(".topic-checkbox"));
+    const n = children.filter(c => c.checked).length;
+    gcb.checked = n === children.length;
+    gcb.indeterminate = n > 0 && n < children.length;
+  });
+  // Sync "all" checkbox
+  const all = Array.from(document.querySelectorAll(".topic-checkbox"));
+  const nChecked = all.filter(c => c.checked).length;
   const allCb = document.getElementById("cb-all");
-  if (allCb) allCb.checked = allChecked;
+  if (allCb) {
+    allCb.checked = nChecked === all.length;
+    allCb.indeterminate = nChecked > 0 && nChecked < all.length;
+  }
   updateQuestionCount();
 }
 
@@ -129,7 +202,7 @@ function showQuestion() {
         <div class="q-label">Flashcard</div>
         <div class="q-text">${q.question}</div>
         <div id="fc-body">
-          <button class="btn-next" style="margin-left:0" onclick="revealFlashcard()">Reveal answer →</button>
+          <button class="btn-next" style="margin-left:0" onclick="revealFlashcard()">Reveal answer</button>
         </div>
         <div class="card-footer" id="card-footer"></div>
       </div>`;
@@ -155,7 +228,7 @@ function showQuestion() {
       <div class="q-text">${q.question}</div>
       <div class="options-list">${optionsHTML}</div>
       <div id="confirm-wrap" style="margin-top:12px">
-        <button class="btn-next" onclick="confirmAnswer()">Confirm →</button>
+        <button class="btn-next" onclick="confirmAnswer()">Confirm</button>
       </div>
       <div class="card-footer" id="card-footer"></div>
     </div>`;
@@ -227,7 +300,7 @@ function confirmAnswer() {
     : `<span class="feedback-badge ko">✗ Wrong</span>`;
   const exp = q.explanation
     ? `<div class="feedback-explanation">${q.explanation}</div>` : "";
-  const nextLabel = current >= order.length ? "See results →" : "Next →";
+  const nextLabel = current >= order.length ? "See results" : "Next";
 
   document.getElementById("card-footer").innerHTML =
     `${badge}${exp}<button class="btn-next" onclick="showQuestion()">${nextLabel}</button>`;
@@ -278,15 +351,20 @@ function backToStart() {
   document.getElementById("btn-restart").classList.add("hidden");
   document.getElementById("quiz-area").innerHTML = `
     <div class="start-screen">
-      <h2>Ready to review?</h2>
-      <p>Select your answer(s), then click <strong>Confirm</strong>.</p>
-      <div class="start-chips">
-        <span class="chip chip-accent" id="question-count">… questions</span>
-        <span class="chip">True/False &amp; MCQ</span>
-        <span class="chip">Randomized</span>
+      <div class="start-hero">
+        <h2>Ready to review?</h2>
+        <p>Select your answer(s), then click <strong>Confirm</strong>.</p>
+        <div class="start-chips">
+          <span class="chip chip-accent" id="question-count">… questions</span>
+          <span class="chip">True/False &amp; MCQ</span>
+          <span class="chip">Randomized</span>
+        </div>
       </div>
-      <div class="topic-selector" id="topic-selector"></div>
-      <button class="btn-primary" onclick="startQuiz()">Start</button>
+      <div class="topic-body">
+        <div class="topic-section-label">Topics</div>
+        <div class="topic-selector" id="topic-selector"></div>
+        <button class="btn-start-full" onclick="startQuiz()">Start</button>
+      </div>
     </div>`;
   renderTopicSelector();
 }
@@ -313,15 +391,20 @@ function buildShell() {
       </div>
       <div id="quiz-area">
         <div class="start-screen">
-          <h2>Ready to review?</h2>
-          <p>Select your answer(s), then click <strong>Confirm</strong>.</p>
-          <div class="start-chips">
-            <span class="chip chip-accent" id="question-count">… questions</span>
-            <span class="chip">True/False &amp; MCQ</span>
-            <span class="chip">Randomized</span>
+          <div class="start-hero">
+            <h2>Ready to review?</h2>
+            <p>Select your answer(s), then click <strong>Confirm</strong>.</p>
+            <div class="start-chips">
+              <span class="chip chip-accent" id="question-count">… questions</span>
+              <span class="chip">True/False &amp; MCQ</span>
+              <span class="chip">Randomized</span>
+            </div>
           </div>
-          <div class="topic-selector" id="topic-selector"></div>
-          <button class="btn-primary" onclick="startQuiz()">Start</button>
+          <div class="topic-body">
+            <div class="topic-section-label">Topics</div>
+            <div class="topic-selector" id="topic-selector"></div>
+            <button class="btn-start-full" onclick="startQuiz()">Start</button>
+          </div>
         </div>
       </div>
     </main>`;
