@@ -111,7 +111,7 @@ function updateProgress() {
 }
 
 function isMulti(q) {
-  return Array.isArray(q.answer);
+  return q.type === "mcq";
 }
 
 function showQuestion() {
@@ -138,7 +138,7 @@ function showQuestion() {
 
   document.getElementById("quiz-area").innerHTML = `
     <div class="question-card">
-      <div class="q-label">${q.type === "tf" ? "True / False" : "Multiple Choice"}</div>
+      <div class="q-label">${q.type === "tf" ? "True / False" : q.type === "mcq" ? "Multiple Choice" : "Single Choice"}</div>
       <div class="q-text">${q.question}</div>
       <div class="options-list">${optionsHTML}</div>
       <div id="confirm-wrap" style="margin-top:12px">
