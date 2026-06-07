@@ -111,7 +111,7 @@ function updateProgress() {
 }
 
 function isMulti(q) {
-  return q.type === "mcq";
+  return Array.isArray(q.answer);
 }
 
 function showQuestion() {
