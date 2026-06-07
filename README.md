@@ -51,6 +51,8 @@ registerTopic("My Topic",
 ```
 4. Open `index.html` in a browser
 
-## Example implementation
+## Examples implementation
 
 See [ba4-cs233-quiz](https://github.com/sami-epfl/ba4-cs233-quiz) — a full course repo using this engine, live at [sami-epfl.github.io/ba4-cs233-quiz](https://sami-epfl.github.io/ba4-cs233-quiz/).
+
+See [ba4-cs202-quiz](https://github.com/sami-epfl/ba4-cs202-quiz) — a full course repo using this engine, live at [sami-epfl.github.io/ba4-cs202-quiz](https://sami-epfl.github.io/ba4-cs202-quiz/).
