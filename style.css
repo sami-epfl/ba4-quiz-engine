@@ -306,11 +306,11 @@ main {
 .topic-name { flex: 1; font-size: .88rem; }
 .topic-label-all .topic-name { font-size: .92rem; }
 .topic-count {
-  font-size: .72rem; font-weight: 700;
-  background: var(--surface); color: var(--text-muted);
-  border: 1px solid var(--border);
-  border-radius: 20px; padding: .18rem .6rem;
-  min-width: 2rem; text-align: center;
+  font-size: .78rem; font-weight: 700;
+  background: rgba(255,255,255,.06); color: var(--text);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 20px; padding: .2rem .65rem;
+  min-width: 2.2rem; text-align: center;
 }
 .topic-label-all .topic-count {
   background: var(--accent); color: #0f0f13; border-color: var(--accent);
@@ -337,20 +337,20 @@ main {
 .topic-label-group {
   cursor: pointer;
   background: var(--surface);
-  border-color: var(--accent);
+  border-color: rgba(200,169,110,.3);
   color: var(--accent);
   font-weight: 600;
   border-radius: 10px;
   transition: border-radius .2s, border-color .15s, background .15s;
 }
-.topic-label-group:hover { background: var(--accent-soft); }
+.topic-label-group:hover { background: var(--accent-soft); border-color: rgba(200,169,110,.5); }
 .topic-group:not(.collapsed) .topic-label-group {
   border-radius: 10px 10px 0 0;
   border-bottom-color: transparent;
 }
 
 .topic-group-arrow {
-  font-size: .75rem; color: var(--accent);
+  font-size: .75rem; color: var(--text-muted);
   transition: transform .2s; display: inline-block;
   margin-left: .4rem;
 }
@@ -358,7 +358,7 @@ main {
 
 .topic-group-children {
   display: flex; flex-direction: column; gap: 0;
-  border: 1px solid var(--accent);
+  border: 1px solid rgba(200,169,110,.3);
   border-top: none;
   border-radius: 0 0 10px 10px;
   overflow: hidden;
