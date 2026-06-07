@@ -121,7 +121,7 @@ function showQuestion() {
   updateProgress();
 
   const q = activeQuestions[order[current]];
-  const labels = ["A", "B", "C", "D", "E", "F", "G", "H"];
+  const labels = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i));
 
   if (q.type === "flashcard") {
     document.getElementById("quiz-area").innerHTML = `
