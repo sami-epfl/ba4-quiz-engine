@@ -413,7 +413,10 @@ function buildShell() {
     </main>`;
 }
 
-function _onReady() { buildShell(); init(); }
+function _onReady() {
+  if (document.getElementById("quiz-area")) return; // already initialized by onload
+  buildShell(); init();
+}
 if (document.readyState === "loading") {
   window.addEventListener("DOMContentLoaded", _onReady);
 } else {
