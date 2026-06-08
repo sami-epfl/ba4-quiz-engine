@@ -2,12 +2,15 @@ const cfg = (typeof QUIZ_CONFIG !== "undefined") ? QUIZ_CONFIG : {};
 const _title    = cfg.title    || "Quiz";
 const _subtitle = cfg.subtitle || "";
 
-const TOPICS = {};
+// Preserve topics pre-registered by the inline stub in index.html
+if (typeof window.TOPICS === "undefined") window.TOPICS = {};
+const TOPICS = window.TOPICS;
 
 function registerTopic(name, ...questions) {
   if (!TOPICS[name]) TOPICS[name] = [];
   TOPICS[name].push(...questions);
 }
+window.registerTopic = registerTopic;
 
 let activeQuestions = [];
 let order = [];
@@ -410,4 +413,9 @@ function buildShell() {
     </main>`;
 }
 
-window.addEventListener("DOMContentLoaded", () => { buildShell(); init(); });
+function _onReady() { buildShell(); init(); }
+if (document.readyState === "loading") {
+  window.addEventListener("DOMContentLoaded", _onReady);
+} else {
+  _onReady();
+}
