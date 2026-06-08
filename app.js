@@ -410,7 +410,10 @@ function buildShell() {
           </div>
         </div>
       </div>
-    </main>`;
+    </main>
+    ${cfg.landingUrl ? `<footer style="position:relative;z-index:1;padding:1.5rem;font-size:.75rem;color:var(--text-muted);text-align:center">
+      <a href="${cfg.landingUrl}" style="color:var(--accent);text-decoration:none">← All quizzes</a>
+    </footer>` : ""}`;
 }
 
 function _onReady() {
