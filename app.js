@@ -379,6 +379,7 @@ function buildShell() {
       <div class="logo">
         <h1>${_title}</h1>
         ${_subtitle ? `<div class="subtitle">${_subtitle}</div>` : ""}
+        ${cfg.repoUrl ? `<div class="last-updated" id="last-updated"></div>` : ""}
       </div>
       <button class="btn-restart hidden" id="btn-restart" onclick="backToStart()" title="Restart">↺</button>
     </header>
@@ -416,9 +417,24 @@ function buildShell() {
     </footer>` : ""}`;
 }
 
+function fetchLastUpdated() {
+  if (!cfg.repoUrl) return;
+  const match = cfg.repoUrl.match(/github\.com\/([^/]+\/[^/]+)/);
+  if (!match) return;
+  fetch(`https://api.github.com/repos/${match[1]}/commits?per_page=1`)
+    .then(r => r.json())
+    .then(data => {
+      const date = data?.[0]?.commit?.committer?.date;
+      if (!date) return;
+      const el = document.getElementById("last-updated");
+      if (el) el.textContent = "Updated " + new Date(date).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+    })
+    .catch(() => {});
+}
+
 function _onReady() {
   if (document.getElementById("quiz-area")) return; // already initialized by onload
-  buildShell(); init();
+  buildShell(); init(); fetchLastUpdated();
 }
 if (document.readyState === "loading") {
   window.addEventListener("DOMContentLoaded", _onReady);
