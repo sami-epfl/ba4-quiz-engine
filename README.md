@@ -123,8 +123,12 @@ The group checkbox supports three states: all checked, none checked, and indeter
 
 ---
 
-## Examples of implementation
+## 🚀 Examples of implementation
 
-See [ba4-cs233-quiz](https://github.com/sami-epfl/ba4-cs233-quiz) — a full course repo using this engine, live at [sami-epfl.github.io/ba4-cs233-quiz](https://sami-epfl.github.io/ba4-cs233-quiz/).
+> 🌐 All quizzes centralized at [ba4-quizzes](https://sami-epfl.github.io/ba4-quizzes/)
 
-See [ba4-cs202-quiz](https://github.com/sami-epfl/ba4-cs202-quiz) — a full course repo using this engine, live at [sami-epfl.github.io/ba4-cs202-quiz](https://sami-epfl.github.io/ba4-cs202-quiz/).
+| Course | Repo | Live demo |
+|--------|------|-----------|
+| COM-202 | [ba4-com202-quiz](https://github.com/sami-epfl/ba4-com202-quiz) | [▶ sami-epfl.github.io/ba4-com202-quiz](https://sami-epfl.github.io/ba4-com202-quiz/) |
+| CS-202 | [ba4-cs202-quiz](https://github.com/sami-epfl/ba4-cs202-quiz) | [▶ sami-epfl.github.io/ba4-cs202-quiz](https://sami-epfl.github.io/ba4-cs202-quiz/) |
+| CS-233 | [ba4-cs233-quiz](https://github.com/sami-epfl/ba4-cs233-quiz) | [▶ sami-epfl.github.io/ba4-cs233-quiz](https://sami-epfl.github.io/ba4-cs233-quiz/) |
