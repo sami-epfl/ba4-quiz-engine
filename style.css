@@ -413,4 +413,7 @@ main {
   .results-grid { grid-template-columns: 1fr 1fr 1fr; gap: .6rem; }
   .results-stat .val { font-size: 1.3rem; }
   .q-text { font-size: 1.05rem; }
+  .question-card { padding: 1.2rem; }
+  .card-footer { flex-direction: column; align-items: stretch; }
+  .btn-next { margin-left: 0; width: 100%; text-align: center; }
 }
