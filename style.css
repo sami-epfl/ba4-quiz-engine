@@ -406,14 +406,60 @@ main {
 .stat-total   .val { color: var(--accent); }
 .results .btn-primary { margin-top: .5rem; }
 
-@media (max-width: 480px) {
-  header { padding: 1.25rem 1rem 0; }
-  main   { padding: 1.25rem 1rem; }
-  .start-screen, .results { padding: 2rem 1.25rem; }
-  .results-grid { grid-template-columns: 1fr 1fr 1fr; gap: .6rem; }
-  .results-stat .val { font-size: 1.3rem; }
-  .q-text { font-size: 1.05rem; }
-  .question-card { padding: 1.2rem; }
-  .card-footer { flex-direction: column; align-items: stretch; }
-  .btn-next { margin-left: 0; width: 100%; text-align: center; }
+@media (max-width: 600px) {
+  /* Layout */
+  header { padding: 1rem .5rem 0; gap: .6rem; }
+  main   { padding: 1rem .5rem 1.5rem; }
+
+  /* Start screen */
+  .start-screen { border-radius: 12px; }
+  .start-hero { padding: 1.6rem 1.1rem 1.3rem; }
+  .start-screen h2 { font-size: 1.35rem; }
+  .start-screen p  { font-size: .84rem; margin-bottom: 1rem; }
+  .start-btns { gap: .55rem; }
+
+  /* Topic selector */
+  .topic-body { padding: 1rem 1rem 1.4rem; }
+  .topic-label {
+    padding: .75rem .85rem;
+    gap: .55rem;
+  }
+  .topic-label-sub { padding-left: 1rem; }
+  .topic-name { font-size: .92rem; }
+  .topic-label-all .topic-name { font-size: .95rem; }
+  .topic-count { font-size: .8rem; padding: .22rem .6rem; min-width: 2rem; }
+  .topic-group-arrow { font-size: .8rem; }
+  .topic-selector { gap: .4rem; }
+
+  /* Question card */
+  .question-card { padding: 1.1rem 1rem; border-radius: 12px; }
+  .q-text { font-size: 1rem; }
+  .q-text pre { font-size: .76rem; padding: .55rem .7rem; }
+  .opt { padding: .75rem .85rem; gap: .7rem; }
+  .opt-txt { font-size: .88rem; }
+  .opt-ring { width: 26px; height: 26px; font-size: .7rem; }
+
+  /* Card footer */
+  .card-footer { flex-direction: column; align-items: stretch; gap: .6rem; }
+  .btn-next { margin-left: 0; width: 100%; text-align: center; padding: .75rem; }
+  .feedback-badge { font-size: .8rem; }
+  .feedback-explanation { font-size: .8rem; }
+
+  /* Flashcard */
+  .fc-actions { justify-content: stretch; gap: .5rem; }
+  .btn-fc-correct, .btn-fc-wrong { flex: 1; text-align: center; padding: .7rem .8rem; font-size: .85rem; }
+
+  /* Results */
+  .results { padding: 1.5rem 1rem; }
+  .results h2 { font-size: 1.3rem; }
+  .big-score { font-size: 3rem; }
+  .results-grid { grid-template-columns: 1fr 1fr 1fr; gap: .5rem; }
+  .results-stat { padding: .75rem .5rem; }
+  .results-stat .val { font-size: 1.25rem; }
+  .results-stat .lbl { font-size: .68rem; }
+
+  /* Header pills */
+  .score-pill { font-size: .76rem; padding: .28rem .75rem; }
+  .logo h1 { font-size: 1.3rem; }
+  .logo .subtitle { font-size: .75rem; }
 }
