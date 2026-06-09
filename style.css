@@ -52,6 +52,13 @@ header {
   font-weight: 300;
   margin-top: .1rem;
 }
+.last-updated {
+  font-size: .72rem;
+  color: var(--text-muted);
+  font-weight: 300;
+  margin-top: .15rem;
+  opacity: .6;
+}
 
 .topbar-right { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; }
 
@@ -280,54 +287,54 @@ main {
   margin-bottom: .75rem;
 }
 .topic-selector {
-  display: flex; flex-direction: column; gap: .35rem;
+  display: flex; flex-direction: column; gap: .7rem;
   margin-bottom: 1.4rem; text-align: left;
 }
 .topic-label-all-wrap {
-  background: var(--accent-soft); border: 1px solid rgba(200,169,110,.3);
-  border-radius: 10px; margin-bottom: .6rem;
+  background: transparent; border: none;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0; margin-bottom: .75rem; padding-bottom: .75rem;
 }
 .topic-label {
   display: flex; align-items: center; gap: .65rem;
   padding: .6rem .9rem; border-radius: 10px;
-  border: 1px solid var(--border); cursor: pointer;
+  border: 1px solid rgba(255,255,255,.1); cursor: pointer;
   transition: border-color .15s, background .15s;
-  background: var(--bg);
+  background: rgba(255,255,255,.04);
 }
-.topic-label:hover { border-color: var(--accent); background: var(--accent-soft); }
+.topic-label:hover { border-color: rgba(255,255,255,.25); background: rgba(255,255,255,.07); }
 .topic-label-all {
-  border: none; background: transparent; color: var(--accent); font-weight: 700;
+  border: none; background: transparent; color: var(--text); font-weight: 700;
   border-radius: 10px;
 }
-.topic-label-all:hover { background: rgba(200,169,110,.08); }
+.topic-label-all:hover { background: rgba(255,255,255,.05); }
 .topic-label input[type="checkbox"] {
   accent-color: var(--accent); width: 1rem; height: 1rem; cursor: pointer; flex-shrink: 0;
 }
 .topic-name { flex: 1; font-size: .88rem; }
 .topic-label-all .topic-name { font-size: .92rem; }
 .topic-count {
-  font-size: .78rem; font-weight: 700;
-  background: rgba(255,255,255,.06); color: var(--text);
-  border: 1px solid rgba(255,255,255,.1);
-  border-radius: 20px; padding: .2rem .65rem;
-  min-width: 2.2rem; text-align: center;
+  font-size: .78rem; font-weight: 600;
+  color: var(--text-muted);
+  min-width: 1.5rem; text-align: right;
 }
 .topic-label-all .topic-count {
-  background: var(--accent); color: #0f0f13; border-color: var(--accent);
+  color: var(--text);
 }
 .btn-start-full {
-  width: 100%; padding: .85rem;
-  background: rgba(200,169,110,.1);
+  display: block; margin-left: auto;
+  padding: .55rem 1.4rem;
+  background: rgba(200,169,110,.12);
   color: var(--accent);
-  border: 1px solid rgba(200,169,110,.35);
-  border-radius: 10px;
-  font-family: inherit; font-size: 1rem; font-weight: 600;
+  border: 1px solid rgba(200,169,110,.3);
+  border-radius: 8px;
+  font-family: inherit; font-size: .88rem; font-weight: 600;
   cursor: pointer; transition: background .2s, border-color .2s, transform .15s;
   letter-spacing: .01em;
 }
 .btn-start-full:hover {
-  background: rgba(200,169,110,.18);
-  border-color: rgba(200,169,110,.6);
+  background: rgba(200,169,110,.2);
+  border-color: rgba(200,169,110,.5);
   transform: translateY(-1px);
 }
 
@@ -336,14 +343,14 @@ main {
 
 .topic-label-group {
   cursor: pointer;
-  background: var(--surface);
-  border-color: rgba(200,169,110,.3);
-  color: var(--accent);
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.15);
+  color: var(--text);
   font-weight: 600;
   border-radius: 10px;
   transition: border-radius .2s, border-color .15s, background .15s;
 }
-.topic-label-group:hover { background: var(--accent-soft); border-color: rgba(200,169,110,.5); }
+.topic-label-group:hover { background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.25); }
 .topic-group:not(.collapsed) .topic-label-group {
   border-radius: 10px 10px 0 0;
   border-bottom-color: transparent;
@@ -358,7 +365,7 @@ main {
 
 .topic-group-children {
   display: flex; flex-direction: column; gap: 0;
-  border: 1px solid rgba(200,169,110,.3);
+  border: 1px solid rgba(255,255,255,.15);
   border-top: none;
   border-radius: 0 0 10px 10px;
   overflow: hidden;
@@ -370,10 +377,10 @@ main {
   border-top: 1px solid var(--border);
   border-radius: 0;
   padding-left: 1.4rem;
-  background: var(--bg);
+  background: var(--surface);
 }
 .topic-label-sub:first-child { border-top: none; }
-.topic-label-sub:hover { border-color: var(--border); background: var(--accent-soft); }
+.topic-label-sub:hover { background: rgba(255,255,255,.07); }
 .topic-label-sub:last-child { border-radius: 0 0 9px 9px; }
 
 .topic-group-total { margin-right: .2rem; }
